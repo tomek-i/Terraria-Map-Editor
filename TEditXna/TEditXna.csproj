@@ -126,6 +126,10 @@
     <Compile Include="Editor\MouseTile.cs" />
     <Compile Include="Editor\PaintMode.cs" />
     <Compile Include="Editor\Plugins\BasePlugin.cs" />
+    <Compile Include="Editor\Plugins\ExpandMap.cs" />
+    <Compile Include="Editor\Plugins\ExpandMapPluginView.xaml.cs">
+      <DependentUpon>ExpandMapPluginView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Editor\Plugins\FindChestWithPluginResultView.xaml.cs">
       <DependentUpon>FindChestWithPluginResultView.xaml</DependentUpon>
     </Compile>
@@ -335,6 +339,10 @@
       <SubType>
       </SubType>
     </Compile>
+    <Page Include="Editor\Plugins\ExpandMapPluginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Editor\Plugins\FindChestWithPluginResultView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -560,7 +568,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

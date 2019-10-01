@@ -134,23 +134,32 @@ namespace TEditXna.ViewModel
             _spritesView = (ListCollectionView)CollectionViewSource.GetDefaultView(World.Sprites);
             _spritesView.Filter = o =>
             {
-                if (string.IsNullOrWhiteSpace(_spriteFilter)) return true;
+                if (string.IsNullOrWhiteSpace(_spriteFilter))
+                    return true;
 
                 var sprite = (Sprite)o;
 
                 string[] _spriteFilterSplit = _spriteFilter.Split('/');
                 foreach (string _spriteWord in _spriteFilterSplit)
                 {
-                    if (sprite.TileName == _spriteWord) return true;
-                    if (sprite.Name == _spriteWord) return true;
-                    if (sprite.TileName != null && sprite.TileName.IndexOf(_spriteWord, StringComparison.OrdinalIgnoreCase) >= 0) return true;
-                    if (sprite.Name != null && sprite.Name.IndexOf(_spriteWord, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+                    if (sprite.TileName == _spriteWord)
+                        return true;
+                    if (sprite.Name == _spriteWord)
+                        return true;
+                    if (sprite.TileName != null && sprite.TileName.IndexOf(_spriteWord, StringComparison.OrdinalIgnoreCase) >= 0)
+                        return true;
+                    if (sprite.Name != null && sprite.Name.IndexOf(_spriteWord, StringComparison.OrdinalIgnoreCase) >= 0)
+                        return true;
                 }
 
-                if (sprite.TileName == _spriteFilter) return true;
-                if (sprite.Name == _spriteFilter) return true;
-                if (sprite.TileName != null && sprite.TileName.IndexOf(_spriteFilter, StringComparison.OrdinalIgnoreCase) >= 0) return true;
-                if (sprite.Name != null && sprite.Name.IndexOf(_spriteFilter, StringComparison.OrdinalIgnoreCase) >= 0) return true;
+                if (sprite.TileName == _spriteFilter)
+                    return true;
+                if (sprite.Name == _spriteFilter)
+                    return true;
+                if (sprite.TileName != null && sprite.TileName.IndexOf(_spriteFilter, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+                if (sprite.Name != null && sprite.Name.IndexOf(_spriteFilter, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
 
                 return false;
             };
@@ -682,23 +691,32 @@ namespace TEditXna.ViewModel
 
             string[] split = version.Split('.');
 
-            if (split.Length < 3) return false; // SBLogic -- accept revision part if present
+            if (split.Length < 3)
+                return false; // SBLogic -- accept revision part if present
 
             int major;
             int minor;
             int build;
             int revis = -1;
 
-            if (!int.TryParse(split[0], out major)) return false;
-            if (!int.TryParse(split[1], out minor)) return false;
-            if (!int.TryParse(split[2], out build)) return false;
+            if (!int.TryParse(split[0], out major))
+                return false;
+            if (!int.TryParse(split[1], out minor))
+                return false;
+            if (!int.TryParse(split[2], out build))
+                return false;
 
-            if ((split.Length == 4) && (split[3].Length > 0) && (!int.TryParse(split[3], out revis))) return false;
+            if ((split.Length == 4) && (split[3].Length > 0) && (!int.TryParse(split[3], out revis)))
+                return false;
 
-            if (major > App.Version.ProductMajorPart) return true;
-            if (minor > App.Version.ProductMinorPart) return true;
-            if (build > App.Version.ProductBuildPart) return true;
-            if (revis > App.Version.ProductPrivatePart) return true;
+            if (major > App.Version.ProductMajorPart)
+                return true;
+            if (minor > App.Version.ProductMinorPart)
+                return true;
+            if (build > App.Version.ProductBuildPart)
+                return true;
+            if (revis > App.Version.ProductPrivatePart)
+                return true;
 
             return false;
         }
@@ -719,7 +737,8 @@ namespace TEditXna.ViewModel
 
         private void AnalyzeWorldSave()
         {
-            if (CurrentWorld == null) return;
+            if (CurrentWorld == null)
+                return;
             var sfd = new SaveFileDialog();
             sfd.DefaultExt = "Text File|*.txt";
             sfd.Filter = "Text Files|*.txt";
@@ -740,7 +759,8 @@ namespace TEditXna.ViewModel
 
         private void TallyCountSave()
         {
-            if (CurrentWorld == null) return;
+            if (CurrentWorld == null)
+                return;
             var sfd = new SaveFileDialog();
             sfd.DefaultExt = "Text File|*.txt";
             sfd.Filter = "Text Files|*.txt";
@@ -805,7 +825,8 @@ namespace TEditXna.ViewModel
 
         protected virtual void OnPreviewChanged(object sender, EventArgs e)
         {
-            if (PreviewChanged != null) PreviewChanged(sender, e);
+            if (PreviewChanged != null)
+                PreviewChanged(sender, e);
         }
 
         private void SetActiveTool(ITool tool)
@@ -996,25 +1017,30 @@ namespace TEditXna.ViewModel
                 .ContinueWith(t => RenderEntireWorld())
                 .ContinueWith(t =>
                 {
-                    if (CurrentWorld != null)
-                    {
-                        PixelMap = t.Result;
-                        UpdateTitle();
-                        Points.Clear();
-                        Points.Add("Spawn");
-                        Points.Add("Dungeon");
-                        foreach (NPC npc in CurrentWorld.NPCs)
-                        {
-                            Points.Add(npc.Name);
-                        }
-                        MinimapImage = RenderMiniMap.Render(CurrentWorld);
-                        _loadTimer.Stop();
-                        OnProgressChanged(this, new ProgressChangedEventArgs(0,
-                            $"World loaded in {_loadTimer.Elapsed.TotalSeconds} seconds."));
-                        _saveTimer.Start();
-                    }
-                    _loadTimer.Stop();
+                    FinalizeWorldUpdate(t);
                 }, TaskFactoryHelper.UiTaskScheduler);
+        }
+
+        public void FinalizeWorldUpdate(Task<PixelMapManager> t)
+        {
+            if (CurrentWorld != null)
+            {
+                PixelMap = t.Result;
+                UpdateTitle();
+                Points.Clear();
+                Points.Add("Spawn");
+                Points.Add("Dungeon");
+                foreach (NPC npc in CurrentWorld.NPCs)
+                {
+                    Points.Add(npc.Name);
+                }
+                MinimapImage = RenderMiniMap.Render(CurrentWorld);
+                _loadTimer.Stop();
+                OnProgressChanged(this, new ProgressChangedEventArgs(0,
+                    $"World loaded in {_loadTimer.Elapsed.TotalSeconds} seconds."));
+                _saveTimer.Start();
+            }
+            _loadTimer.Stop();
         }
     }
 }

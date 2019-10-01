@@ -40,6 +40,9 @@ namespace TEditXna.ViewModel
             wvm.Tools.Add(new MorphTool(wvm));
             wvm.ActiveTool = defaultTool;
 
+
+            wvm.Plugins.Add(new ExpandMap(wvm));
+
             wvm.Plugins.Add(new SandSettlePlugin(wvm));
             wvm.Plugins.Add(new SimplePerlinGeneratorPlugin(wvm));
             wvm.Plugins.Add(new ReplaceAllPlugin(wvm));
