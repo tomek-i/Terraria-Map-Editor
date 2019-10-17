@@ -575,7 +575,7 @@ namespace TEditXna.ViewModel
                     curTile.LiquidAmount = 0;
         }
 
-        private PixelMapManager RenderEntireWorld()
+        public PixelMapManager RenderEntireWorld()
         {
             var pixels = new PixelMapManager();
             if (CurrentWorld != null)
@@ -614,4 +614,3 @@ namespace TEditXna.ViewModel
         }
     }
 }
- 
